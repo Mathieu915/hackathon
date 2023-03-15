@@ -4,6 +4,8 @@
     <title>Précautions en cas de grêle pour votre véhicule assuré</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="css_grele.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDO1AU0mmb9rwNFTgshVCM6Rqb3jsvkpBI"></script>
+
 
   </head>
   <body>
@@ -18,5 +20,47 @@
       <li>Après la tempête, inspectez votre véhicule pour détecter d'éventuels dommages et prenez des photos</li>
       <li>Contactez votre compagnie d'assurance dès que possible pour signaler les dommages</li>
     </ul>
+
+    <script>
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 47.90282850772732, lng: 1.908695291859179},
+          zoom: 15
+        });
+
+        var request = {
+          location: map.getCenter(),
+          radius: '500',
+          type: ['parking']
+        };
+
+        var service = new google.maps.places.PlacesService(map);
+        service.nearbySearch(request, function(results, status) {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            for (var i = 0; i < results.length; i++) {
+              createMarker(results[i], map);
+            }
+          }
+        });
+      }
+
+      function createMarker(place, map) {
+        var marker = new google.maps.Marker({
+          map: map,
+          position: place.geometry.location
+        });
+      }
+    </script>
+
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDO1AU0mmb9rwNFTgshVCM6Rqb3jsvkpBI&callback=initMap">
+    </script>
+
+
+
+    <div id="map" style="height: 500px; width: 750px; margin: auto"></div>
+
+
+
   </body>
 </html>
