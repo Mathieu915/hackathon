@@ -16,7 +16,6 @@
             <version>1.18.26</version>
             <scope>compile</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/net.sourceforge.tess4j/tess4j -->
         <dependency>
             <groupId>net.sourceforge.tess4j</groupId>
             <artifactId>tess4j</artifactId>

@@ -1,4 +1,4 @@
-import org.openstreetmap.gui.jmapviewer.JMapViewer;
+/*import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
@@ -18,3 +18,4 @@ public class Map {
         });
     }
 }
+*/

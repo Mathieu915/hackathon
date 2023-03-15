@@ -1,23 +1,78 @@
-import org.junit.Assert;
-import org.junit.Assert.*;
-import net.sourceforge.tess4j.Tesseract;
+import org.apache.commons.io.IOUtils;
 import net.sourceforge.tess4j.TesseractException;
-
-import java.io.File;
+import java.io.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class testTesseract {
-    public void main(String[] args){
-        File image = new File("src/main/resources/images/TEST.png");
-        Tesseract tesseract = new Tesseract();
+    public static void main(String[] args) throws TesseractException, IOException {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.command("tesseract", "/Users/hugo/Desktop/Cours/MasterMIAGEM2/S2/hackathon/Weather/src/main/resources/images/re-u-parking.jpeg", "output");
         try {
-            tesseract.setDatapath("src/main/resources/tessdata");
-            tesseract.setLanguage("fr");
-            tesseract.setPageSegMode(1);
-            tesseract.setOcrEngineMode(1);
-            String result = tesseract.doOCR(image);
-            Assert.assertTrue(result.contains(""));
-        } catch (TesseractException e) {
+
+            Process process = processBuilder.start();
+            StringBuilder output = new StringBuilder();
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                output.append(line + "\n");
+            }
+            int exitVal = process.waitFor();
+            if (exitVal == 0) {
+                System.out.println("Success!");
+                System.out.println(output);
+            } else {
+                System.out.println("Failed!");
+                System.exit(1);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        FileInputStream fis = new FileInputStream("/Users/hugo/Desktop/Cours/MasterMIAGEM2/S2/hackathon/output.txt");
+        String data = IOUtils.toString(fis, "UTF-8");
+        System.out.println(data);
+        // chercher la ligne contenant "ORLEANS" à l'aide d'une expression régulière
+        Pattern pattern = Pattern.compile("(?i).*\\bORLEANS\\b.*");
+        Matcher matcher = pattern.matcher(data);
+        if (matcher.find()) {
+            String location = matcher.group();
+            System.out.println("Localisation : " + location);
+        } else {
+            System.out.println("Localisation non trouvée.");
+        }
+        // chercher la date d'entrée
+        pattern = Pattern.compile("ENTR\\.\\s*(\\d{2}\\.\\d{2}\\.\\d{2})");
+        matcher = pattern.matcher(data);
+        if (matcher.find()) {
+            String dateEntree = matcher.group(1);
+            System.out.println("Date d'entrée : " + dateEntree);
+        } else {
+            System.out.println("Date d'entrée non trouvée.");
+        }
+        // chercher la date de sortie
+        pattern = Pattern.compile("PAYE\\.\\s*(\\d{2}\\.\\d{2}\\.\\d{2})");
+        matcher = pattern.matcher(data);
+        if (matcher.find()) {
+            String dateSortie = matcher.group(1);
+            System.out.println("Date de sortie : " + dateSortie);
+        } else {
+            System.out.println("Date de sortie non trouvée.");
+        }
+        // Utilisation d'une expression régulière pour extraire la valeur associée à "PRIX TTC"
+        String prixTTCRegex = "PRIX TTC:\\s*(\\d+\\.\\d{2})\\s*EU";
+        pattern = Pattern.compile(prixTTCRegex);
+        matcher = pattern.matcher(data);
+        if (matcher.find()) {
+            String prixTTC = matcher.group(1);
+            System.out.println("Le prix TTC est : " + prixTTC + "€");
+        } else {
+            System.out.println("Le prix TTC n'a pas été trouvé.");
+        }
+
+
     }
 }
