@@ -13,7 +13,7 @@ public class messageAlert {
         Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
         Message message = Message.creator(new PhoneNumber(TO_NUMBER),
                 new PhoneNumber(FROM_NUMBER), "Alerte Grêle! Consultez nos recommandations de sécurité ici : https://github.com/Mathieu915/hackathon/blob/main/Weather/src/main/resources/page_grele/liste_grele.html").create();
-        System.out.println(message.getSid());*/
+        System.out.println(message.getSid());
     }
 }
 

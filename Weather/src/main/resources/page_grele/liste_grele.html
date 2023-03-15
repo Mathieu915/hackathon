@@ -4,7 +4,10 @@
   <title>Précautions en cas de grêle pour votre véhicule assuré</title>
   <meta charset="utf-8">
   <link rel="stylesheet" href="css_grele.css">
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDO1AU0mmb9rwNFTgshVCM6Rqb3jsvkpBI&libraries=places"></script>
+  <script async
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDO1AU0mmb9rwNFTgshVCM6Rqb3jsvkpBI&libraries=places&callback=initMap">
+  </script>
+
 </head>
 <body>
 <h1>Précautions en cas de grêle pour votre véhicule assuré</h1>
@@ -19,7 +22,7 @@
   <li>Contactez votre compagnie d'assurance dès que possible pour signaler les dommages</li>
 </ul>
 
-<div id="map" style="height: 500px; width: 750px; margin: auto"></div>
+<div id="map" style="height: 500px; width: 1250px; margin: auto"></div>
 
 
 <script>
@@ -34,9 +37,12 @@
       rotateControl: true // Ajout du contrôle de rotation
     });
 
+    var noPoi = [{featureType: "poi", stylers: [{ visibility: "off" }]}];
+    map.setOptions({styles: noPoi});
+
     var request = {
       location: map.getCenter(),
-      radius: '500000',
+      radius: '500',
       type: ['parking']
     };
 
@@ -63,7 +69,8 @@
 
 </script>
 
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDO1AU0mmb9rwNFTgshVCM6Rqb3jsvkpBI&callback=initMap"></script>
 
 </body>
 </html>
+
+
