@@ -1,66 +1,69 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Précautions en cas de grêle pour votre véhicule assuré</title>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="css_grele.css">
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDO1AU0mmb9rwNFTgshVCM6Rqb3jsvkpBI"></script>
+<head>
+  <title>Précautions en cas de grêle pour votre véhicule assuré</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="css_grele.css">
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDO1AU0mmb9rwNFTgshVCM6Rqb3jsvkpBI&libraries=places"></script>
+</head>
+<body>
+<h1>Précautions en cas de grêle pour votre véhicule assuré</h1>
+<ul>
+  <li>Si possible, garer votre véhicule dans un garage couvert ou sous un abri</li>
+  <li>Si vous êtes en déplacement, chercher un endroit sûr pour vous garer</li>
+  <li>Si vous ne pouvez pas garer votre véhicule, couvrez-le avec des couvertures ou des tapis pour protéger la carrosserie</li>
+  <li>Si vous ne pouvez pas protéger votre véhicule, essayez de trouver un abri pour vous protéger, comme un bâtiment ou un garage</li>
+  <li>Ne jamais stationner sous un arbre ou un poteau électrique pendant une tempête de grêle</li>
+  <li>Évitez de conduire pendant une tempête de grêle. Si vous devez conduire, réduisez votre vitesse et augmentez la distance entre les véhicules</li>
+  <li>Après la tempête, inspectez votre véhicule pour détecter d'éventuels dommages et prenez des photos</li>
+  <li>Contactez votre compagnie d'assurance dès que possible pour signaler les dommages</li>
+</ul>
+
+<div id="map" style="height: 500px; width: 750px; margin: auto"></div>
 
 
-  </head>
-  <body>
-    <h1>Précautions en cas de grêle pour votre véhicule assuré</h1>
-    <ul>
-      <li>Si possible, garer votre véhicule dans un garage couvert ou sous un abri</li>
-      <li>Si vous êtes en déplacement, chercher un endroit sûr pour vous garer</li>
-      <li>Si vous ne pouvez pas garer votre véhicule, couvrez-le avec des couvertures ou des tapis pour protéger la carrosserie</li>
-      <li>Si vous ne pouvez pas protéger votre véhicule, essayez de trouver un abri pour vous protéger, comme un bâtiment ou un garage</li>
-      <li>Ne jamais stationner sous un arbre ou un poteau électrique pendant une tempête de grêle</li>
-      <li>Évitez de conduire pendant une tempête de grêle. Si vous devez conduire, réduisez votre vitesse et augmentez la distance entre les véhicules</li>
-      <li>Après la tempête, inspectez votre véhicule pour détecter d'éventuels dommages et prenez des photos</li>
-      <li>Contactez votre compagnie d'assurance dès que possible pour signaler les dommages</li>
-    </ul>
+<script>
+  function initMap() {
+    var map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: 47.90282850772732, lng: 1.908695291859179},
+      zoom: 15,
+      zoomControl: true, // Ajout du contrôle de zoom
+      mapTypeControl: true, // Ajout du contrôle de type de carte
+      scaleControl: true, // Ajout du contrôle d'échelle
+      streetViewControl: true, // Ajout du contrôle de Street View
+      rotateControl: true // Ajout du contrôle de rotation
+    });
 
-    <script>
-      function initMap() {
-        var map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 47.90282850772732, lng: 1.908695291859179},
-          zoom: 15
-        });
+    var request = {
+      location: map.getCenter(),
+      radius: '500000',
+      type: ['parking']
+    };
 
-        var request = {
-          location: map.getCenter(),
-          radius: '500',
-          type: ['parking']
-        };
-
-        var service = new google.maps.places.PlacesService(map);
-        service.nearbySearch(request, function(results, status) {
-          if (status === google.maps.places.PlacesServiceStatus.OK) {
-            for (var i = 0; i < results.length; i++) {
-              createMarker(results[i], map);
-            }
+    var service = new google.maps.places.PlacesService(map);
+    service.nearbySearch(request, function(results, status) {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        for (var i = 0; i < results.length; i++) {
+          if (results[i].types.includes('parking')) {
+            createMarker(results[i], map);
           }
-        });
+        }
       }
+    });
+  }
 
-      function createMarker(place, map) {
-        var marker = new google.maps.Marker({
-          map: map,
-          position: place.geometry.location
-        });
-      }
-    </script>
+  function createMarker(place, map) {
+    if (place.types.includes('parking')) {
+      var marker = new google.maps.Marker({
+        map: map,
+        position: place.geometry.location
+      });
+    }
+  }
 
-    <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDO1AU0mmb9rwNFTgshVCM6Rqb3jsvkpBI&callback=initMap">
-    </script>
+</script>
 
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDO1AU0mmb9rwNFTgshVCM6Rqb3jsvkpBI&callback=initMap"></script>
 
-
-    <div id="map" style="height: 500px; width: 750px; margin: auto"></div>
-
-
-
-  </body>
+</body>
 </html>
